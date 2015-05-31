@@ -93,4 +93,14 @@ class OperationsFacadeTest extends PHPUnit_Framework_TestCase
         
         $facade->executeOperation('insert', ['test data']);
     }
+
+    /**
+     * @expectedException \Sata\DbTest\Exceptions\OperationNotFoundException
+     */
+    public function testThrowExceptionIfExecuteUnknownOperation()
+    {
+        $facade = $this->getOperationFacade(['createDBUnitConnection', 'createDBUnitDataSet']);
+
+        $facade->executeOperation('not_existing_opeartion', 'data');
+    }
 }

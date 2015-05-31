@@ -8,6 +8,7 @@ use PHPUnit_Extensions_Database_DataSet_IDataSet;
 use PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection;
 use PHPUnit_Extensions_Database_DB_IDatabaseConnection;
 use PHPUnit_Extensions_Database_Operation_IDatabaseOperation;
+use Sata\DbTest\Exceptions\OperationNotFoundException;
 
 class OperationsFacade
 {
@@ -64,6 +65,8 @@ class OperationsFacade
      * @param string $operation
      * 
      * @return PHPUnit_Extensions_Database_Operation_IDatabaseOperation
+     * 
+     * @throws OperationNotFoundException
      */
     protected function createDBUnitOperation($operation)
     {
@@ -77,11 +80,13 @@ class OperationsFacade
             case 'update':
                 return call_user_func(['PHPUnit_Extensions_Database_Operation_Factory', strtoupper($operation)]);
         }
+
+        throw new OperationNotFoundException($operation, 'Operation ' . $operation . ' not found');
     }
 
     /**
      * @param $data
-     * 
+     *
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
     protected function createDBUnitDataSet($data)
