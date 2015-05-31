@@ -1,0 +1,30 @@
+{
+  "name": "sata/db-test",
+  "type": "library",
+  "description": "Library for database integration tests",
+  "minimum-stability": "stable",
+  "keywords": ["testing", "database", "db", "fixture", "phpunit"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ilja Pokusaev",
+      "email": "satahippy@gmail.com"
+    }
+  ],
+  
+  "require": {
+    "php": ">=5.4.0",
+    "phpunit/dbunit": "~1.0"
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  
+  "autoload": {
+    "psr-4": {
+      "Sata\\DbTest\\": "src",
+      "Sata\\DbTest\\Test\\": "tests"
+    }
+  }
+}
