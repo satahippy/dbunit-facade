@@ -50,10 +50,68 @@ class OperationsFacade
     }
 
     /**
+     * @return void
+     */
+    public function none()
+    {
+        $this->executeOperation('none');
+    }
+
+    /**
+     * @param array $data
+     */
+    public function insert($data)
+    {
+        $this->executeOperation('insert', $data);
+    }
+
+    /**
+     * @param array $data
+     */
+    public function cleanInsert($data)
+    {
+        $this->executeOperation('clean_insert', $data);
+    }
+
+    /**
+     * @param array $data
+     */
+    public function update($data)
+    {
+        $this->executeOperation('update', $data);
+    }
+
+    /**
+     * @param string[]|string $tables
+     */
+    public function truncate($tables)
+    {
+        $data = $this->simpleTablesListData($tables);
+        $this->executeOperation('truncate', $data);
+    }
+
+    /**
+     * @param array $condition
+     */
+    public function delete($condition)
+    {
+        $this->executeOperation('delete', $condition);
+    }
+
+    /**
+     * @param string[]|string $tables
+     */
+    public function deleteAll($tables)
+    {
+        $data = $this->simpleTablesListData($tables);
+        $this->executeOperation('delete_all', $data);
+    }
+
+    /**
      * @param string $operation
      * @param mixed $data
      */
-    public function executeOperation($operation, $data)
+    public function executeOperation($operation, $data = [])
     {
         $operation = $this->createDBUnitOperation($operation);
         $data = $this->createDBUnitDataSet($data);
@@ -100,5 +158,26 @@ class OperationsFacade
     protected function createDBUnitConnection()
     {
         return new PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection($this->pdo);
+    }
+
+    /**
+     * Return data for DBUnit operations without tables data needs
+     * 
+     * @param string[]|string $tables
+     * 
+     * @return array
+     */
+    protected function simpleTablesListData($tables)
+    {
+        if (!is_array($tables)) {
+            $tables = [$tables];
+        }
+
+        $data = [];
+        foreach($tables as $table) {
+            $data[$table] = [];
+        }
+        
+        return $data;
     }
 }

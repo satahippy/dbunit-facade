@@ -103,4 +103,147 @@ class OperationsFacadeTest extends PHPUnit_Framework_TestCase
 
         $facade->executeOperation('not_existing_opeartion', 'data');
     }
+
+    public function testNone()
+    {
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('none');
+
+        $facade->none();
+    }
+
+    public function testInsert()
+    {
+        $data = [
+            'table1' => [
+                [
+                    'field1' => 'value1',
+                    'field2' => 'value2',
+                ],
+                [
+                    'field1' => 'value1',
+                    'field2' => 'value2',
+                ],
+            ]
+        ];
+        
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('insert', $data);
+
+        $facade->insert($data);
+    }
+
+    public function testTruncateManyTables()
+    {
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('truncate', [
+                'table1' => [],
+                'table2' => [],
+            ]);
+
+        $facade->truncate(['table1', 'table2']);
+    }
+
+    public function testTruncateOneTables()
+    {
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('truncate', [
+                'table1' => [],
+            ]);
+
+        $facade->truncate('table1');
+    }
+
+    public function testDelete()
+    {
+        $condition = [
+            'table1' => [
+                [
+                    'id' => 'some id',
+                ],
+            ]
+        ];
+        
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('delete', $condition);
+
+        $facade->delete($condition);
+    }
+
+    public function testDeleteAllManyTables()
+    {
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('delete_all', [
+                'table1' => [],
+                'table2' => [],
+            ]);
+
+        $facade->deleteAll(['table1', 'table2']);
+    }
+
+    public function testDeleteAllOneTables()
+    {
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('delete_all', [
+                'table1' => [],
+            ]);
+
+        $facade->deleteAll('table1');
+    }
+
+    public function testUpdate()
+    {
+        $data = [
+            'table1' => [
+                [
+                    'id' => 'some id',
+                    'field2' => 'modified value',
+                ],
+            ]
+        ];
+
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('update', $data);
+
+        $facade->update($data);
+    }
+
+    public function testCleanInsert()
+    {
+        $data = [
+            'table1' => [
+                [
+                    'field1' => 'value1',
+                    'field2' => 'value2',
+                ],
+                [
+                    'field1' => 'value1',
+                    'field2' => 'value2',
+                ],
+            ]
+        ];
+
+        $facade = $this->getOperationFacade(['executeOperation']);
+        $facade->expects($this->once())
+            ->method('executeOperation')
+            ->with('clean_insert', $data);
+
+        $facade->cleanInsert($data);
+    }
 }
